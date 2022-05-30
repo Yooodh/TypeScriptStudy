@@ -1,4 +1,4 @@
-/*********** #1 ***********/
+/*********** #1 타입스크립트를 쓰는 이유 ***********/
 
 console.log("Hello TypeScript!!")
 
@@ -31,7 +31,7 @@ showItems([1, 2, 3]);
 // showItems(1, 2, 3);
 
 
-/*********** #2 ***********/
+/*********** #2 기본 타입 ***********/
 
 // let car = 'bmw' // string를 쓰지 않아도 이미 string으로 알고있다. // type 추론
 let car:string = 'bmw';
@@ -130,3 +130,149 @@ myOs = Os.Window
 let a0:null = null;
 // let b0 = undefined;
 let b0:undefined = undefined;
+
+/*********** #3 인터페이스 ***********/
+
+// let user:object;
+
+// user = {
+//     name : 'xx',
+//     age : 30
+// }
+
+// console.log(user.name); // object에는 name이 없다
+
+// 프로퍼티를 정해서 개체를 표현하고자 할 때 인터페이스를 사용한다.
+
+type Score = 'A' | 'B' | 'C' | 'F';
+
+interface User {
+    name : string;
+    age : number;
+    gender? : string; // 옵셔널 : 입력을 해도 되고 안해도 되는 속성은 뒤에 ?를 붙여주면 된다.
+    readonly birthYear: number;
+
+    /* 학년별로 점수를 기입해주고 싶을 때 */
+    // 1~4학년까지 인터페이스 정해주기
+    // 에러가 나지 않게 하려면 모두 옵셔널하게 만들어 줄 수 밖에 없다.
+    // 1? : string;
+    // 2? : string;
+    // 3? : string;
+    // 4? : string;
+
+    /* 모두 옵셔널하게 만들지 않고 문자열 인덱스 설명을 추가하는 방법 */
+    // [grade:number] : string; // number를 key로 하고 string을 value로 받는 프로퍼티를 여러개 받을 수 있다.
+    [grade:number] : Score; // string일 때는 어떠한 문자열도 입력할 수 있었지만 type Score로 선언 된 값 밖에는 입력할 수 없다. 
+
+}
+
+let user : User = {
+    name : 'xx',
+    age : 30,
+    birthYear : 2000,
+    // 1:'s', // Error
+    1:'A',
+    2:'B'
+}
+
+user.age = 10;
+user.gender = "male" // gneder라는 프로퍼티를 쓸 때에는 무조건 string이어야 한다.
+// user.birthYear = 1990; // 읽기 전용 속성이라 최초 생성할 때만 할당이 가능하고 이후에는 수정할 수 없다.
+
+console.log(user.age);
+
+/* interface로 함수 정의하기 */
+
+// Add라는 인터페이스 만들기
+interface Add {
+    // 내부에 괄호, 인자값, 리턴값을 적어준다.
+    // 더한 숫자 return
+    (num1:number, num2:number) :number; 
+}
+
+// add0 이라는 함수를 만들고 위에서 만든 인터페이스로 정의해준다.
+// 인터페이스에는 num1, num2라고 정의했지만 x, y로도 사용할 수 있다.
+const add0 : Add = function(x, y){
+    return x + y;
+}
+
+// add0(10, 20, 30); // Error
+// add0(10, '20'); // Error
+add0(10,20);
+
+/* 나이를 받아서 성인인지 아닌지 Boolean 값을 리턴애 주는 함수 정의하기 */
+
+interface isAdult {
+    (age:number):boolean;
+}
+
+const a1:isAdult = (age) => {
+    // 19보다 크면 true, 작으면 false를 반환
+    return age > 19;
+}
+
+a1(33); // true
+
+/* 인터페이스로 클래스 정의하기 */
+// implements 키워드 사용
+
+// Car 인터페이스 만들기
+interface Car {
+    color : string;
+    wheels : number;
+    start() : void;
+}
+
+
+// BMW 클래스 만들기
+// Car에 있는 속성값을 모두 입력해야한다.
+class BMW implements Car {
+    // color = "red";
+    color;
+    wheels = 4;
+
+    // constructor 사용
+    constructor(c:string){
+        this.color = c;
+    }
+
+    start() {
+        console.log('go...');
+    }
+}
+
+const b1 = new BMW('green');
+console.log(b1);
+b1.start();
+
+/* 인터페이스 확장하기 */
+// 인터페이스는 확장이 가능하다.
+// extends 사용
+
+// Car에 있는 속성값을 모두 입력해야한다.
+interface Benz extends Car {
+    door : number;
+    stop() : void;
+}
+
+const benz : Benz = {
+    door : 5,
+    stop() {
+        console.log('stop');
+    },
+    color : 'black',
+    wheels : 4,
+    start() {
+        console.log('go...')
+    }
+}
+
+// 여러개도 확장할 수 있다.
+interface Toy {
+    name : string;
+}
+
+// Toy와 Car을 동시에 확장해서 ToyCar 만들기
+interface ToyCar extends Car, Toy {
+    price : number;
+}
