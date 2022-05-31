@@ -1,4 +1,4 @@
-/*********** #1 타입스크립트를 쓰는 이유 ***********/
+/**************** #1 타입스크립트를 쓰는 이유 ****************/
 
 console.log("Hello TypeScript!!")
 
@@ -31,7 +31,7 @@ showItems([1, 2, 3]);
 // showItems(1, 2, 3);
 
 
-/*********** #2 기본 타입 ***********/
+/**************** #2 기본 타입 ****************/
 
 // let car = 'bmw' // string를 쓰지 않아도 이미 string으로 알고있다. // type 추론
 let car:string = 'bmw';
@@ -131,7 +131,7 @@ let a0:null = null;
 // let b0 = undefined;
 let b0:undefined = undefined;
 
-/*********** #3 인터페이스 ***********/
+/**************** #3 인터페이스 ****************/
 
 // let user:object;
 
@@ -272,7 +272,133 @@ interface Toy {
     name : string;
 }
 
-// Toy와 Car을 동시에 확장해서 ToyCar 만들기
+/* Toy와 Car을 동시에 확장해서 ToyCar 만들기 */
 interface ToyCar extends Car, Toy {
     price : number;
 }
+
+
+/**************** #4 함수 ****************/
+
+// 각 매개변수의 타입을 입력해주고, 괄호 뒤에는 이 함수가 반환하는 타입을 입력해준다.
+function add1(num1: number, num2: number): number {
+    return num1 + num2;
+}
+
+// 아무것도 return 해주지 않으면 void로 입력한다.
+function add2(num1: number, num2: number): void {
+    // return num1 + num2;
+    console.log(num1 + num2);
+}
+
+// boolean 타입 
+function isAdult0(age: number): boolean {
+    return age > 19;
+}
+
+// 인터페이스 처럼 함수에 매개 변수도 옵셔널로 지정할 수 있다.
+// name이 없을 때를 대비한 코드가 있지만 타입스크립트에서는 보다 명시적으로 알려줘야한다.
+// 옵셔널이라고 하더라도 타입은 항상 지켜줘야한다.
+// undefind이거나 만약 있다면 string이거나 둘중에 하나.
+function hello1(name?: string) { // name은 string // name은 있어도 되고 없어도 되는 옵셔널한 파라미터 // 선택적 매개 변수
+    // name이 있으면 name을 쓰고 없으면 world를 출력
+    return `Hello, ${name || "world"}`;
+}
+
+/* 자바스크립트에서 처럼 매개 변수에 디폴트 값 주기 */
+function hello2(name = "world") {
+    return `Hello, ${name}`;
+}
+
+const result = hello1(); 
+const result2 = hello1("Sam");
+// const result3 = hello0(123); // Error
+
+/* 이름과 나이를 받아서 문자열을 출력 */
+function hello3(name: string, age?: number):string { // age는 옵셔널 파라미터(입력을 해도 되고 안해도 된다.)
+
+// name 앞에 age 가 오면 안 된다. 
+// 이 둘의(선택적 매개 변수와 필수 매개변수) 자리를 바꾸면 에러 발생
+// function hello3(age?: number, name: string): string { 
+
+// age를 앞에 두고 옵셔널 하게 사용
+// age를 number와 undefined를 받을 수 있게 해주고 명시적으로 undefined를 전달하는 방식으로 사용
+// function hello3(age: number | undefined, name: string): string
+
+    if(age !== undefined) { // 나이가 있을 때와 없을 때를 구분
+        return `Hello, ${name}. You are ${age}.`;
+    } else {
+        return `Hello, ${name}`;
+    }
+}
+
+console.log(hello3("Sam"));
+console.log(hello3("Sam", 30));
+
+// age를 앞에 두고 옵셔널 하게 사용
+// console.log(hello3(30, "Sam"));
+// console.log(hello3(undefined, "Sam"));
+
+/* 나머지 매개 변수들의 타입 작성 법 */
+
+// 숫자들을 전달받아서 모두 더해주는 함수
+// 레스트 파라미터(나머지 매개 변수) 사용
+// 나머지 매개 변수는 개수가 매번 바뀔 수 있다.
+// ...을 사용하면 전달받은 매개 변수를 배열로 나타낼 수 있게 한다.
+// 그래서 타입을 number[] 형태로 기입한다.
+function add3(...nums: number[]) {
+    return nums.reduce((result, num) => result + num, 0);
+}
+
+add3(1, 2, 3); // 6
+add3(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); // 55
+
+
+/* this */
+interface User0 {
+    name: string;
+}
+
+const Sam: User0 = {name:'Sam'}
+
+// 타입 스크립트에서 this의 타입을 정할 때는 함수의 첫 번째 매개 변수 자리에 this를 쓰고 타입을 입력해준다.
+// function showName(this:User0){
+//     console.log(this.name)
+// }
+
+// 매개 변수가 있을 때
+// a3에서 전달한 매개 변수는 this 다음부터 첫 번째(age) 두 번째(gender) 순서대로 적용된다.
+function showName(this: User0, age: number, gender:'m' | 'f'){
+    console.log(this.name, age, gender)
+}
+
+// bind를 이용해서 this를 Sam 객체로 강제한다.
+const a3 = showName.bind(Sam);
+
+// a3();
+a3(30, 'm');
+
+interface User1 {
+    name: string;
+    age : number;
+}
+
+// 동일한 함수지만 매개 변수에 타입이나 개수에 따라 다른 방식으로 동작해야 된다면 오버로드를 사용할 수 있다.
+function join(name: string, age: number):User1;
+function join(name: string, age: string):string;
+function join(name:string, age:number | string): User1 | string {
+    // age가 숫자라면
+    if (typeof age === "number"){
+        // User1을 return하고
+        return {
+            name,
+            age,
+        };
+        // 아니라면 string을 리턴한다.
+    } else {
+        return " 나이는 숫자로 입력해주세요.";
+    }
+}
+
+const sam: User1 = join("Sam", 30);
+const jane: string = join("Jane", "30");
