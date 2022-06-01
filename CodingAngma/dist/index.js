@@ -1,5 +1,6 @@
 "use strict";
 /**************** #1 타입스크립트를 쓰는 이유 ****************/
+Object.defineProperty(exports, "__esModule", { value: true });
 console.log("Hello TypeScript!!");
 // 함수로 만들 때 의도했던 방식 외에 다른 방법은 모두 에러로 표시
 // 다른 사람이 만든 함수를 사용할 때 몇개의 인수를 어떤 타입으로 전달해야 하는지 일일이 코드를 뒤져볼 필요가 없다.
@@ -247,3 +248,35 @@ function join(name, age) {
 }
 var sam = join("Sam", 30);
 var jane = join("Jane", "30");
+/**************** #5 리터럴, 유니온/교차 타입 ****************/
+/* Literal Types */
+// const : 변하지 않는 값을 선언할 때 사용
+var userName1 = "Bob"; // Bob // string이지만 변할 수 없으니 Bob 이외의 값을 가질 수 없다.
+// let : 변할 수 있는 값을 선언할 때 사용
+// let userName2 = "Tom"; // string // Tom이지만 언제든 다른 값으로 변할 수 있으니 보다 넓은 개념의 string 타입으로 정의된다.
+// userName2 = 3; // Error // 최초 할당 값이 string
+// 숫자도 넣을 수 있게 하기
+var userName2 = "Tom";
+userName2 = 3;
+var user2 = {
+    name: "Bob",
+    job: "developer", // Job에 있는 값만 사용할 수 있다.
+};
+// 동일한 속성의 타입을 다르게 해서 구분 할 수 있는 것을 식별 가능한 유니온 타입
+function gerGift(gift) {
+    console.log(gift.color);
+    if (gift.name === "car") {
+        gift.start(); // Car0
+    }
+    else {
+        gift.call(); // Mobile
+    }
+}
+// 장난감 자동차
+// 모든 속성을 다 기입 해주어야 한다.
+var toyCar1 = {
+    name: "타요",
+    start: function () { },
+    color: "blue",
+    price: 1000, // 장난감
+};

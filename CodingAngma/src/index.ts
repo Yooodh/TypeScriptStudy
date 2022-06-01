@@ -1,5 +1,7 @@
 /**************** #1 타입스크립트를 쓰는 이유 ****************/
 
+import { JSDocPublicTag } from "typescript";
+
 console.log("Hello TypeScript!!")
 
 // 함수로 만들 때 의도했던 방식 외에 다른 방법은 모두 에러로 표시
@@ -402,3 +404,98 @@ function join(name:string, age:number | string): User1 | string {
 
 const sam: User1 = join("Sam", 30);
 const jane: string = join("Jane", "30");
+
+
+/**************** #5 리터럴, 유니온/교차 타입 ****************/
+
+/* Literal Types */
+
+// const : 변하지 않는 값을 선언할 때 사용
+const userName1 = "Bob"; // Bob // string이지만 변할 수 없으니 Bob 이외의 값을 가질 수 없다.
+
+// let : 변할 수 있는 값을 선언할 때 사용
+// let userName2 = "Tom"; // string // Tom이지만 언제든 다른 값으로 변할 수 있으니 보다 넓은 개념의 string 타입으로 정의된다.
+// userName2 = 3; // Error // 최초 할당 값이 string
+
+// 숫자도 넣을 수 있게 하기
+let userName2: string | number = "Tom";
+userName2 = 3; 
+
+
+type Job = "police" | "developer" | "teacher";
+
+interface User2 {
+    name : string;
+    job : Job;
+}
+
+const user2:User2 = {
+    name : "Bob",
+    job : "developer", // Job에 있는 값만 사용할 수 있다.
+};
+
+interface HighSchoolStuendt {
+    name : number | string;
+    grade : 1 | 2 | 3; 
+}
+
+/* Union Types */
+
+// 자동차
+interface Car0 {
+    // 이름
+    name : "car"; // car 타입
+    // 색상
+    color : string;
+    // 출발
+    start() : void;
+}
+
+// 핸드폰 
+interface Mobile {
+    // 이름
+    name : "mobile"; // mobile 타입
+    // 색상
+    color: string;
+    // 전화
+    call(): void;
+}
+
+// 동일한 속성의 타입을 다르게 해서 구분 할 수 있는 것을 식별 가능한 유니온 타입
+function gerGift(gift: Car0 | Mobile){
+    console.log(gift.color);
+    if(gift.name === "car"){
+        gift.start(); // Car0
+    } else {
+        gift.call(); // Mobile
+    }
+}
+
+/* Intersection Types */
+// 교차 타입
+// 교차 타입은 여러 타입을 합쳐서 사용한다.
+// Union이 A 또는 B 처럼 or의 의미였다면 교차 타입은 and를 의미한다.
+// 교차 타입은 여러개의 타입을 하나로 합쳐주는 역할을 한다
+// 그래서 필요한 모든 기능을 가진 하나의 타입이 만들어진다.
+
+// 자동차
+interface Car1 {
+    name: string;
+    start(): void;
+}
+
+// 장난감
+interface Toy1 {
+    name: string;
+    color: string;
+    price: number;
+}
+
+// 장난감 자동차
+// 모든 속성을 다 기입 해주어야 한다.
+const toyCar1: Toy1 & Car1 = {
+    name : "타요", // 공통
+    start() {}, // 자동차
+    color: "blue", // 장난감
+    price: 1000, // 장난감
+};
