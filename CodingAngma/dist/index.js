@@ -1,5 +1,20 @@
 "use strict";
 /**************** #1 타입스크립트를 쓰는 이유 ****************/
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 console.log("Hello TypeScript!!");
 // 함수로 만들 때 의도했던 방식 외에 다른 방법은 모두 에러로 표시
@@ -280,3 +295,157 @@ var toyCar1 = {
     color: "blue",
     price: 1000, // 장난감
 };
+/**************** #6 클래스 class ****************/
+// class Car2 {
+//     constructor(color) {
+//         this.color = color;
+//     }
+//     start() {
+//         console.log("start");
+//     }
+// }
+// const bmw1 = new Car2("red");
+// 타입 스크립트에서 클래스를 작성할 때 멤버 변수는 미리 선언을 해줘야 한다.
+// class Car2 {
+//     color: string;
+//     constructor(color: string) {
+//         this.color = color;
+//     }
+//     start() {
+//         console.log("start");
+//     }
+// }
+// const bmw1 = new Car2("red");
+// 멤버 변수를 미리 선언하지 않는 방법
+// 접근 제한자나 readonly를 이용한다.
+var Car2 = /** @class */ (function () {
+    // color: string;
+    function Car2(color) {
+        this.color = color;
+        this.color = color;
+    }
+    Car2.prototype.start = function () {
+        console.log("start");
+    };
+    return Car2;
+}());
+var bmw1 = new Car2("red");
+/* 접근 제한자(Access modifier) - public, private, protected */
+// public은 자식 클래스나 클래스 인스턴스에서 접근이 가능하다.
+// 아무것도 표기하지 않고 작성하면 모두 public이다.
+// ES6의 클래스는 다른 객체 지향 언어들처럼 접근체한자를 지원하지 않는다.
+// 하지만 타입스크립트에서는 지원한다.
+var Car3 = /** @class */ (function () {
+    function Car3(color) {
+        this.name = "car"; // 아무것도 적지 않으면 public과 같다.
+        this.color = color;
+    }
+    Car3.prototype.start = function () {
+        console.log("start");
+        console.log(this.name);
+        // console.log(this.#name);
+    };
+    return Car3;
+}());
+var Bmw2 = /** @class */ (function (_super) {
+    __extends(Bmw2, _super);
+    function Bmw2(color) {
+        // super로 호출하지 않으면 에러 발생
+        return _super.call(this, color) || this;
+    }
+    // Car3의 name이 public이기 때문에 자식 클래스에서 접근해도 문제없이 사용할 수 있다.
+    Bmw2.prototype.showName = function () {
+        console.log(this.name);
+        // console.log(this.#name); 
+    };
+    return Bmw2;
+}(Car3));
+var z4 = new Bmw2("black");
+console.log(z4.name);
+z4.name = "zzzz4";
+// name을 수정할 수 없게 하려면 readonly 키워드를 사용한다.
+var Car4 = /** @class */ (function () {
+    function Car4(color, name) {
+        this.name = "car";
+        this.color = color;
+        this.name = name;
+    }
+    Car4.prototype.start = function () {
+        console.log("start");
+        console.log(this.name);
+    };
+    return Car4;
+}());
+var Bmw3 = /** @class */ (function (_super) {
+    __extends(Bmw3, _super);
+    function Bmw3(color, name) {
+        return _super.call(this, color, name) || this;
+    }
+    Bmw3.prototype.showName = function () {
+        console.log(this.name);
+    };
+    return Bmw3;
+}(Car4));
+var z5 = new Bmw3("black", "zzzz4");
+console.log(z5.name);
+// 54.name = "zzzz4";
+/* static 프로퍼티 */
+// static을 쓰면 정적 멤버변수를 만들 수 있다.
+// Class. 으로 접근 가능
+var Car5 = /** @class */ (function () {
+    function Car5(color, name) {
+        this.name = "car";
+        this.color = color;
+        this.name = name;
+    }
+    Car5.prototype.start = function () {
+        console.log("start");
+        console.log(this.name);
+        // static으로 선언 된 정적 멤버 변수나 메서드는 this가 아니라 클래스 명을 넣어준다.
+        // console.log(this.wheels); // Error
+        console.log(Car5.wheels);
+    };
+    // wheels를 static으로 선언
+    Car5.wheels = 4;
+    return Car5;
+}());
+var Bmw4 = /** @class */ (function (_super) {
+    __extends(Bmw4, _super);
+    function Bmw4(color, name) {
+        return _super.call(this, color, name) || this;
+    }
+    Bmw4.prototype.showName = function () {
+        console.log(this.name);
+    };
+    return Bmw4;
+}(Car5));
+var z6 = new Bmw3("black", "zzzz4");
+console.log(z6.name);
+// static으로 선언 된 정적 멤버 변수나 메서드는 this가 아니라 클래스 명을 넣어준다.
+// console.log(z6.wheels); // Error
+console.log(Car5.wheels);
+/* 추상 class */
+// 추상 class는 class  앞에 abstract 키워드를 사용해서 만들 수 있다.
+var Car6 = /** @class */ (function () {
+    function Car6(color) {
+        this.color = color;
+    }
+    Car6.prototype.start = function () {
+        console.log("start");
+    };
+    return Car6;
+}());
+// 추상 class는 new를 이용해서 객체르 만들 수 없다.
+// const car0 = naw Car6("red"); // Error
+// 추상 class는 상속을 통해서만 사용이 가능하다.
+var Bmw5 = /** @class */ (function (_super) {
+    __extends(Bmw5, _super);
+    function Bmw5(color) {
+        return _super.call(this, color) || this;
+    }
+    Bmw5.prototype.doSomething = function () {
+        console.log(3);
+    };
+    return Bmw5;
+}(Car6));
+var z7 = new Bmw5("black");

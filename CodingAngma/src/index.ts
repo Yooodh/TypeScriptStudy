@@ -499,3 +499,191 @@ const toyCar1: Toy1 & Car1 = {
     color: "blue", // 장난감
     price: 1000, // 장난감
 };
+
+/**************** #6 클래스 class ****************/
+
+// class Car2 {
+//     constructor(color) {
+//         this.color = color;
+//     }
+//     start() {
+//         console.log("start");
+//     }
+// }
+
+// const bmw1 = new Car2("red");
+
+// 타입 스크립트에서 클래스를 작성할 때 멤버 변수는 미리 선언을 해줘야 한다.
+// class Car2 {
+//     color: string;
+//     constructor(color: string) {
+//         this.color = color;
+//     }
+//     start() {
+//         console.log("start");
+//     }
+// }
+
+// const bmw1 = new Car2("red");
+
+// 멤버 변수를 미리 선언하지 않는 방법
+// 접근 제한자나 readonly를 이용한다.
+class Car2 {
+    // color: string;
+    constructor(public color: string) { // public 혹은 readonly를 적어준다.
+        this.color = color;
+    }
+    start() {
+        console.log("start");
+    }
+}
+
+const bmw1 = new Car2("red");
+
+/* 접근 제한자(Access modifier) - public, private, protected */
+// public은 자식 클래스나 클래스 인스턴스에서 접근이 가능하다.
+// 아무것도 표기하지 않고 작성하면 모두 public이다.
+
+// ES6의 클래스는 다른 객체 지향 언어들처럼 접근체한자를 지원하지 않는다.
+// 하지만 타입스크립트에서는 지원한다.
+class Car3 {
+    name: string = "car"; // 아무것도 적지 않으면 public과 같다.
+
+    // name을 수정할 수 없게 하려면 readonly 키워드를 사용한다.
+    // readonly name :string = "car";
+
+    // public name: string = "car"; // public은 자식클래스, class extends 모두 접근할 수 있다.
+
+    // protected name: string = "car"; // 자식 클래스 내부에서는 접근할 수 있으나 class extends 로는 접근할 수 없다.
+
+    // private name: string = "car"; // 자식 클래스 내부에서 사용할 수 없다.
+    // #name: string = "car"; // privated와 같은 기능
+
+    color: string;
+    constructor(color: string) {
+        this.color = color;
+    }
+    start() {
+        console.log("start");
+        console.log(this.name);
+        // console.log(this.#name);
+    }
+}
+
+class Bmw2 extends Car3 {
+    constructor(color: string) {
+        // super로 호출하지 않으면 에러 발생
+        super(color);
+    }
+    // Car3의 name이 public이기 때문에 자식 클래스에서 접근해도 문제없이 사용할 수 있다.
+    showName() {
+        console.log(this.name);
+        // console.log(this.#name); 
+    }
+}
+
+const z4 = new Bmw2("black");
+console.log(z4.name);
+z4.name = "zzzz4";
+
+
+// name을 수정할 수 없게 하려면 readonly 키워드를 사용한다.
+class Car4 {
+    readonly name :string = "car";
+    color: string;
+    constructor(color: string, name: string) {
+        this.color = color;
+        this.name = name;
+    }
+    start() {
+        console.log("start");
+        console.log(this.name);
+    }
+}
+
+class Bmw3 extends Car4 {
+    constructor(color: string, name: string) {
+        super(color, name);
+    }
+    showName() {
+        console.log(this.name);
+
+    }
+}
+
+const z5 = new Bmw3("black", "zzzz4");
+console.log(z5.name);
+// 54.name = "zzzz4";
+
+/* static 프로퍼티 */
+// static을 쓰면 정적 멤버변수를 만들 수 있다.
+// Class. 으로 접근 가능
+class Car5 {
+    readonly name :string = "car";
+    color: string;
+    // wheels를 static으로 선언
+    static wheels = 4;
+    constructor(color: string, name: string) {
+        this.color = color;
+        this.name = name;
+    }
+    start() {
+        console.log("start");
+        console.log(this.name);
+
+        // static으로 선언 된 정적 멤버 변수나 메서드는 this가 아니라 클래스 명을 넣어준다.
+        // console.log(this.wheels); // Error
+        console.log(Car5.wheels);
+
+    }
+}
+
+class Bmw4 extends Car5 {
+    constructor(color: string, name: string) {
+        super(color, name);
+    }
+    showName() {
+        console.log(this.name);
+
+    }
+}
+
+const z6 = new Bmw3("black", "zzzz4");
+console.log(z6.name);
+// static으로 선언 된 정적 멤버 변수나 메서드는 this가 아니라 클래스 명을 넣어준다.
+// console.log(z6.wheels); // Error
+console.log(Car5.wheels);
+
+/* 추상 class */
+// 추상 class는 class  앞에 abstract 키워드를 사용해서 만들 수 있다.
+abstract class Car6 {
+    color: string;
+    constructor(color: string) {
+        this.color = color;
+    }
+    start() {
+        console.log("start");
+    }
+    // 아무 작업도 하지 않는 메서드 생성 // abstract 붙여주기
+    // 자식 클래스 에러가 난다.
+    // 추상 class 내부에 추상 메서드는 반드시 상속받은 쪽에서 구체적인 구현을 해주어야 한다.
+    // 추상은 이렇게 프로퍼티나 메서드의 이름만 선언해주고 구체적인 기능은 상속 받는 쪽에서 구현해 주는 것을 의미한다.
+    // 추상 클래스를 상속받아 만든 수많은 객체들이 동일하게 이 메서드를 가지고 있겠지만 구체적인 기능은 가지각색 일 수 있다. 
+    abstract doSomething():void;
+}
+
+// 추상 class는 new를 이용해서 객체르 만들 수 없다.
+// const car0 = naw Car6("red"); // Error
+
+// 추상 class는 상속을 통해서만 사용이 가능하다.
+class Bmw5 extends Car6 {
+    constructor(color: string) {
+        super(color);
+    }
+    // 구체적인 기능을 정해주면 에러가 사라진다.
+    doSomething() {
+        console.log(3);
+    }
+}
+
+const z7 = new Bmw5("black");
