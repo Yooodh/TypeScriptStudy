@@ -687,3 +687,108 @@ class Bmw5 extends Car6 {
 }
 
 const z7 = new Bmw5("black");
+
+/**************** #7 제네릭 Generics ****************/
+
+// 제네릭을 이용하면 클래스나 함수, 인터페이스를 다양한 타입으로 재사용할 수 있다.
+// 선언할 때는 타입 파라미터만 적어주고 생성하는 시점에 사용하는 타입을 결정한다.
+
+// getSize 함수 만들고 배열 받기 // 배열의 크기는 number
+// 매개 변수의 타입이 바뀌었는데 동일한 함수를 재사용하고 싶다면 
+// 함수 오버로드를 사용하거나 유니온 타입 사용
+
+// function getSize(arr: number[] | string[] | boolean[] | object[]):number { // 유니온 타입 사용
+
+function getSize<T>(arr: T[]): number{ // 제네릭 사용 
+// <> 안의 T는 x, a등을 적어줘도 상관없다. 
+// <> 안의 T는 어떤 타입을 전달 받아서 이 함수에서 사용할 수 있도록 한다.
+// 이 매개 변수의 타입은 T의 배열[] 이라고 적어준다.
+
+    // 배열의 크기반환
+    return arr.length;
+}
+
+// 사용하는 쪽에서 타입을 결정해준다.
+// 굳이 <> 안에 기입하지 않아도 타입스크립트는 전달되는 매개 변수를 보고 어떤 타입인지 알고 있다.
+
+// 숫자들로 이루어진 배열 전달
+const arr1 = [1, 2, 3];
+// getSize(arr1); // 3
+getSize<number>(arr1); // 3
+
+// 특정 타입으로 강조하고 싶은 경우에는 이렇게 입력해도 상관없다.
+getSize<number | string>(arr1); // 3
+
+// string으로 배열 만들기
+const arr2 = ["a", "b", "c"];
+// getSize(arr2); // 3
+getSize<string>(arr2); // 3
+
+// 다른 타입들로 배열 만들기
+const arr3 = [false, true, true];
+// getSize(arr3); // 3
+getSize<boolean>(arr3); // 3
+
+const arr4 = [ {}, {}, { name: "Tim" }];
+// getSize(arr4) // 3
+getSize<object>(arr4); // 3
+
+
+/* 인터페이스에서 사용 */
+
+// Mobile0 클래스 생성
+interface Mobile0<T> {
+    // 이름
+    name: string;
+    // 가격
+    price: number;
+    // 옵션 // 옵션에는 어던 데이터가 들어올 지 모르는 상태 
+    // string가 올 수도 있고 객체가 올 수 도 있다. 
+    // boolean이 오거나 옵션이 없으면 null이나 undefined가 올 수도 있다.
+    // 위에 나열 된 모든 타입을 적는 것은 비 효율적이기 때문에 제네릭을 사용한다.
+    // option: any;
+    option: T;
+}
+
+// const m1: Mobile0<object> = {
+    const m1: Mobile0<{ color: string; coupon: boolean}> = { // 옵션 객체의 모습이 정해져 있을때는 이렇게 사용
+    name: "s21",
+    price: 1000,
+    option: {
+        color: "red",
+        coupon: false,
+    },
+};
+
+const m2: Mobile0<string> = {
+    name: "s20",
+    price: 900,
+    option: "good",
+};
+
+interface User3 {
+    name: string;
+    age: number;
+}
+
+interface Car7 {
+    name: string;
+    color: string;
+}
+
+interface Book {
+    price: number;
+}
+
+const user1: User3 = { name: "a", age: 10 };
+const car1: Car7 = { name: "bmw", color: "red" };
+const book: Book = { price: 3000 };
+
+// showName0 함수는 매개 변수를 받아서 그 객체에 네임 프로퍼티를 리턴한다.
+function showName0<T extends{ name: string }>(data:T): string { // 어떤 T 타입이 올 건데 그 타입은 네임이 string인 객체를 확장한 형태이다. 라고 알려준다.
+    return data.name;
+}
+
+showName0(user1);
+showName0(car1);
+// showName0(book); // name이 없어서 에러가 난다.

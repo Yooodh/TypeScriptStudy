@@ -443,9 +443,67 @@ var Bmw5 = /** @class */ (function (_super) {
     function Bmw5(color) {
         return _super.call(this, color) || this;
     }
+    // 구체적인 기능을 정해주면 에러가 사라진다.
     Bmw5.prototype.doSomething = function () {
         console.log(3);
     };
     return Bmw5;
 }(Car6));
 var z7 = new Bmw5("black");
+/**************** #7 제네릭 Generics ****************/
+// 제네릭을 이용하면 클래스나 함수, 인터페이스를 다양한 타입으로 재사용할 수 있다.
+// 선언할 때는 타입 파라미터만 적어주고 생성하는 시점에 사용하는 타입을 결정한다.
+// getSize 함수 만들고 배열 받기 // 배열의 크기는 number
+// 매개 변수의 타입이 바뀌었는데 동일한 함수를 재사용하고 싶다면 
+// 함수 오버로드를 사용하거나 유니온 타입 사용
+// function getSize(arr: number[] | string[] | boolean[] | object[]):number { // 유니온 타입 사용
+function getSize(arr) {
+    // <> 안의 T는 x, a등을 적어줘도 상관없다. 
+    // <> 안의 T는 어떤 타입을 전달 받아서 이 함수에서 사용할 수 있도록 한다.
+    // 이 매개 변수의 타입은 T의 배열[] 이라고 적어준다.
+    // 배열의 크기반환
+    return arr.length;
+}
+// 사용하는 쪽에서 타입을 결정해준다.
+// 굳이 <> 안에 기입하지 않아도 타입스크립트는 전달되는 매개 변수를 보고 어떤 타입인지 알고 있다.
+// 숫자들로 이루어진 배열 전달
+var arr1 = [1, 2, 3];
+// getSize(arr1); // 3
+getSize(arr1); // 3
+// 특정 타입으로 강조하고 싶은 경우에는 이렇게 입력해도 상관없다.
+getSize(arr1); // 3
+// string으로 배열 만들기
+var arr2 = ["a", "b", "c"];
+// getSize(arr2); // 3
+getSize(arr2); // 3
+// 다른 타입들로 배열 만들기
+var arr3 = [false, true, true];
+// getSize(arr3); // 3
+getSize(arr3); // 3
+var arr4 = [{}, {}, { name: "Tim" }];
+// getSize(arr4) // 3
+getSize(arr4); // 3
+// const m1: Mobile0<object> = {
+var m1 = {
+    name: "s21",
+    price: 1000,
+    option: {
+        color: "red",
+        coupon: false,
+    },
+};
+var m2 = {
+    name: "s20",
+    price: 900,
+    option: "good",
+};
+var user1 = { name: "a", age: 10 };
+var car1 = { name: "bmw", color: "red" };
+var book = { price: 3000 };
+// showName0 함수는 매개 변수를 받아서 그 객체에 네임 프로퍼티를 리턴한다.
+function showName0(data) {
+    return data.name;
+}
+showName0(user1);
+showName0(car1);
+// showName0(book); // name이 없어서 에러가 난다.
