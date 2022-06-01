@@ -33,6 +33,7 @@ showItems([1, 2, 3]);
 // showItems(1, 2, 3);
 
 
+
 /**************** #2 기본 타입 ****************/
 
 // let car = 'bmw' // string를 쓰지 않아도 이미 string으로 알고있다. // type 추론
@@ -55,7 +56,9 @@ let week:Array<string> = ['mon', 'tue', 'wed'];
 
 // week1.push(3); // Error
 
+
 /* 튜플 (Tuple) */
+
 // 배열과 비슷한 모양
 // 인덱스 별로 타입이 다를 때 이용할 수 있다.
 let b:[string, number]; // 배열의 첫 번째 요소는 string, 두 번째 요소는 number을 넣을 수 있다는 의미
@@ -71,7 +74,9 @@ b[0].toLowerCase(); // 가능
 // 사용하고 있는 에디터에서 타입스크립트 관련 익스텐션이 설치되어 있으면 
 // .을 찍었을 때 사용할 수 있는 목록이 뜨게 된다.
 
+
 /* void, never */
+
 // void는 함수에서 아무것도 반환하지 않을 때 주로 사용한다.
 // function sayHello(){
 function sayHello():void{
@@ -91,7 +96,9 @@ function showError():never{
     }
 }
 
+
 /* enum */
+
 // 비슷한 값들 끼리 묶어짐
 // 수동으로 값을 주지 않으면 자동으로 0부터 1씩 증가하면서 할당된다.
 // 양방향 매핑
@@ -126,12 +133,15 @@ let myOs:Os;
 
 myOs = Os.Window
 
+
 /* null, undefined */
 
 // let a0 = null;
 let a0:null = null;
 // let b0 = undefined;
 let b0:undefined = undefined;
+
+
 
 /**************** #3 인터페이스 ****************/
 
@@ -183,6 +193,7 @@ user.gender = "male" // gneder라는 프로퍼티를 쓸 때에는 무조건 str
 
 console.log(user.age);
 
+
 /* interface로 함수 정의하기 */
 
 // Add라는 인터페이스 만들기
@@ -202,6 +213,7 @@ const add0 : Add = function(x, y){
 // add0(10, '20'); // Error
 add0(10,20);
 
+
 /* 나이를 받아서 성인인지 아닌지 Boolean 값을 리턴애 주는 함수 정의하기 */
 
 interface isAdult {
@@ -215,7 +227,9 @@ const a1:isAdult = (age) => {
 
 a1(33); // true
 
+
 /* 인터페이스로 클래스 정의하기 */
+
 // implements 키워드 사용
 
 // Car 인터페이스 만들기
@@ -247,7 +261,9 @@ const b1 = new BMW('green');
 console.log(b1);
 b1.start();
 
+
 /* 인터페이스 확장하기 */
+
 // 인터페이스는 확장이 가능하다.
 // extends 사용
 
@@ -274,10 +290,13 @@ interface Toy {
     name : string;
 }
 
+
 /* Toy와 Car을 동시에 확장해서 ToyCar 만들기 */
+
 interface ToyCar extends Car, Toy {
     price : number;
 }
+
 
 
 /**************** #4 함수 ****************/
@@ -307,7 +326,9 @@ function hello1(name?: string) { // name은 string // name은 있어도 되고 �
     return `Hello, ${name || "world"}`;
 }
 
+
 /* 자바스크립트에서 처럼 매개 변수에 디폴트 값 주기 */
+
 function hello2(name = "world") {
     return `Hello, ${name}`;
 }
@@ -316,7 +337,9 @@ const result = hello1();
 const result2 = hello1("Sam");
 // const result3 = hello0(123); // Error
 
+
 /* 이름과 나이를 받아서 문자열을 출력 */
+
 function hello3(name: string, age?: number):string { // age는 옵셔널 파라미터(입력을 해도 되고 안해도 된다.)
 
 // name 앞에 age 가 오면 안 된다. 
@@ -340,6 +363,7 @@ console.log(hello3("Sam", 30));
 // age를 앞에 두고 옵셔널 하게 사용
 // console.log(hello3(30, "Sam"));
 // console.log(hello3(undefined, "Sam"));
+
 
 /* 나머지 매개 변수들의 타입 작성 법 */
 
@@ -406,7 +430,9 @@ const sam: User1 = join("Sam", 30);
 const jane: string = join("Jane", "30");
 
 
+
 /**************** #5 리터럴, 유니온/교차 타입 ****************/
+
 
 /* Literal Types */
 
@@ -438,6 +464,7 @@ interface HighSchoolStuendt {
     name : number | string;
     grade : 1 | 2 | 3; 
 }
+
 
 /* Union Types */
 
@@ -471,7 +498,9 @@ function gerGift(gift: Car0 | Mobile){
     }
 }
 
+
 /* Intersection Types */
+
 // 교차 타입
 // 교차 타입은 여러 타입을 합쳐서 사용한다.
 // Union이 A 또는 B 처럼 or의 의미였다면 교차 타입은 and를 의미한다.
@@ -499,6 +528,8 @@ const toyCar1: Toy1 & Car1 = {
     color: "blue", // 장난감
     price: 1000, // 장난감
 };
+
+
 
 /**************** #6 클래스 class ****************/
 
@@ -540,7 +571,9 @@ class Car2 {
 
 const bmw1 = new Car2("red");
 
+
 /* 접근 제한자(Access modifier) - public, private, protected */
+
 // public은 자식 클래스나 클래스 인스턴스에서 접근이 가능하다.
 // 아무것도 표기하지 않고 작성하면 모두 public이다.
 
@@ -615,7 +648,9 @@ const z5 = new Bmw3("black", "zzzz4");
 console.log(z5.name);
 // 54.name = "zzzz4";
 
+
 /* static 프로퍼티 */
+
 // static을 쓰면 정적 멤버변수를 만들 수 있다.
 // Class. 으로 접근 가능
 class Car5 {
@@ -654,7 +689,9 @@ console.log(z6.name);
 // console.log(z6.wheels); // Error
 console.log(Car5.wheels);
 
+
 /* 추상 class */
+
 // 추상 class는 class  앞에 abstract 키워드를 사용해서 만들 수 있다.
 abstract class Car6 {
     color: string;
@@ -687,6 +724,8 @@ class Bmw5 extends Car6 {
 }
 
 const z7 = new Bmw5("black");
+
+
 
 /**************** #7 제네릭 Generics ****************/
 
@@ -792,3 +831,215 @@ function showName0<T extends{ name: string }>(data:T): string { // 어떤 T 타�
 showName0(user1);
 showName0(car1);
 // showName0(book); // name이 없어서 에러가 난다.
+
+
+
+/**************** #8 유틸리티 타입 Utility Types ****************/
+
+
+/* keyof */
+
+interface User4 {
+    id: number;
+    name: string;
+    age: number;
+    gender: "m" | "f";
+}
+
+// keyof 키워드를 사용하면 유저 인터페이스 키 값들을 유니온 형태로 받을 수 있다.
+type UserKey = keyof User4; // 'id' | 'name' | 'age' | 'gender'
+
+// const uk:UserKey = ""; // Error
+const uk:UserKey = "id"; // 유저 인터페이스 값 중 하나를 입력하면 에러가 사라진다.
+
+
+/* Partial<T> */
+
+// Partial은 프로퍼티를 모두 옵셔널로 바꿔준다.
+// 그래서 일부만 사용하는 것이 가능하다.
+interface User5 {
+    id: number;
+    name: string;
+    age: number;
+    gender: "m" | "f";
+}
+
+// Partial을 사용하면 interface User5 {} 는 이런 형태가 된다.
+// interface User5 {
+//     id?: number;
+//     name?: string;
+//     age?: number;
+//     gender?: "m" | "f";
+// }
+
+let admin: Partial<User5> = {
+    id: 1,
+    name: "Bob",
+
+    // User5 에 없는 프로퍼티를 사용하려고 하면 에러가 난다.
+    // job:"" // Error
+};
+
+
+/* Required<T> */
+
+interface User6 {
+    id: number;
+    name: string;
+    age?: number;
+}
+
+let admin0: Required<User6> = {
+    id: 1,
+    name: "Bob",
+
+    // Required<> 를 넣으면 ?여도 필수 프로퍼티가 된다.
+    age: 30,
+};
+
+
+/* Readonly<T> */
+
+interface User7 {
+    id: number;
+    name: string;
+    age?: number;
+}
+
+let admin1: Readonly<User7> = {
+    id: 1,
+    name: "Bob",
+};
+
+// Roadonly를 사용하면 처음에 할당만 가능하고 수정은 불가능해진다.
+// admin1.id = 4
+
+
+/* Record<K,T> */
+
+// K는 Key T는 Type
+
+// 1학년 부터 4학년 까지 점수르 입력 받는 객체 만들기
+
+// interface Score0 {
+//     "1": "A" | "B" | "C" | "D";
+//     "2": "A" | "B" | "C" | "D";
+//     "3": "A" | "B" | "C" | "D";
+//     "4": "A" | "B" | "C" | "D";
+// }
+
+// const score: Score0 = {
+//     1 : 'A',
+//     2 : 'C',
+//     3 : 'B',
+//     4 : 'D',
+// };
+
+// Record로 활용하기
+// Key 값 1~4까지 적어주기
+// Type 값 적어주기
+// const score: Record<"1" | "2" | "3" | "4", "A" | "B" | "C" | "D"> = {
+//     1 : 'A',
+//     2 : 'C',
+//     3 : 'B',
+//     4 : 'D',
+// };
+
+// 학년 부분과 성적 부분을 Type으로 분리하기
+type Grade0 = "1" | "2" | "3" | "4"; // key로 사용
+type Score0 = "A" | "B" | "C" | "D" | "F"; // type으로 사용 // "F" 추가도 가능
+
+const score: Record<Grade0, Score0> = {
+    1 : 'A',
+    2 : 'C',
+    3 : 'B',
+    4 : 'D',
+};
+
+
+interface User8 {
+    id: number;
+    name: string;
+    age: number;
+}
+
+// 적절한 값이 입력되었는지 체크하는 함수 만들기
+function isValid(user: User8) {
+    // 결과 객체 받기
+    const result:Record<keyof User8, boolean> = { 
+        // user의 아이디가 0 보다 큰지
+        id : user.id > 0,
+        // user의 아이디가 빈 값이 아닌지
+        name : user.name !== "",
+        // user의 나이가 0보다 큰지
+        age : user.age > 0,
+    };
+    // 결과를 리턴
+    return result;
+}
+
+
+/* Pick<T,K> */
+
+// T 타입에서 K 프로퍼티만 골라서 사용한다.
+
+interface User9 {
+    id: number;
+    name: string;
+    age: number;
+    gender: "M" | "W";
+}
+
+// Pick<User9, "id" | "name"> 입력해 주면 User9 에서 id와 name만 가지고 와서 사용할 수 있다.
+const admin2: Pick<User9, "id" | "name"> = {
+    id: 0,
+    name: "Bob",
+
+};
+
+
+/* Omit<T,K> */
+
+// 특정 프로퍼티를 생략하고 쓸 수 있다.
+
+interface User10 {
+    id : number;
+    name: string;
+    age: number;
+    gender: "M" | "W";
+}
+
+// age와 gender은 제외되고 id와 name만 사용
+const admin3: Omit<User10, "age" | "gender"> = {
+    id : 0,
+    name: "Bob",
+};
+
+
+/* Exclude<T1, T2> */
+
+// Type1 에서 Type2를 제와하고 사용하는 방식
+// Omit 과 다른점은 Omit은 프로퍼티들을 제거 
+// Exclude는 타입으로 제거한다.
+
+// T1의 타입들 중에서 T2 타입과 겹치는 타입을 제외 시킨다.
+
+// T1이 string | number 라고 할 때
+type T1 = string | number; 
+// T2는 Exclude T1에서 number를 제외
+type T2 = Exclude<T1, number>; 
+
+
+type T3 = string | number | boolean;
+// boolean만 남게 된다.
+type T4 = Exclude<T3, number | string>;
+
+
+/* NonNullable<Type> */
+
+// Null을 제외한 타입을 생성한다.
+// undefined도 함께 제외시킨다.
+
+type T5 = string | null | undefined | void;
+// string과 void만 남게 된다.
+type T6 = NonNullable<T5>;

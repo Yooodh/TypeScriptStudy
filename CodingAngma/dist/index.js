@@ -506,4 +506,58 @@ function showName0(data) {
 }
 showName0(user1);
 showName0(car1);
-// showName0(book); // name이 없어서 에러가 난다.
+// const uk:UserKey = ""; // Error
+var uk = "id"; // 유저 인터페이스 값 중 하나를 입력하면 에러가 사라진다.
+// Partial을 사용하면 interface User5 {} 는 이런 형태가 된다.
+// interface User5 {
+//     id?: number;
+//     name?: string;
+//     age?: number;
+//     gender?: "m" | "f";
+// }
+var admin = {
+    id: 1,
+    name: "Bob",
+    // User5 에 없는 프로퍼티를 사용하려고 하면 에러가 난다.
+    // job:"" // Error
+};
+var admin0 = {
+    id: 1,
+    name: "Bob",
+    // Required<> 를 넣으면 ?여도 필수 프로퍼티가 된다.
+    age: 30,
+};
+var admin1 = {
+    id: 1,
+    name: "Bob",
+};
+var score = {
+    1: 'A',
+    2: 'C',
+    3: 'B',
+    4: 'D',
+};
+// 적절한 값이 입력되었는지 체크하는 함수 만들기
+function isValid(user) {
+    // 결과 객체 받기
+    var result = {
+        // user의 아이디가 0 보다 큰지
+        id: user.id > 0,
+        // user의 아이디가 빈 값이 아닌지
+        name: user.name !== "",
+        // user의 나이가 0보다 큰지
+        age: user.age > 0,
+    };
+    // 결과를 리턴
+    return result;
+}
+// Pick<User9, "id" | "name"> 입력해 주면 User9 에서 id와 name만 가지고 와서 사용할 수 있다.
+var admin2 = {
+    id: 0,
+    name: "Bob",
+};
+// age와 gender은 제외되고 id와 name만 사용
+var admin3 = {
+    id: 0,
+    name: "Bob",
+};
